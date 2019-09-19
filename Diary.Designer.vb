@@ -35,11 +35,13 @@ Partial Class Diary
         Me.Button7 = New System.Windows.Forms.Button()
         Me.Button8 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(552, 12)
+        Me.Button1.Location = New System.Drawing.Point(543, 40)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 0
@@ -56,7 +58,7 @@ Partial Class Diary
         '
         'RichTextBox2
         '
-        Me.RichTextBox2.BackColor = System.Drawing.SystemColors.MenuHighlight
+        Me.RichTextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.RichTextBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RichTextBox2.ForeColor = System.Drawing.SystemColors.Window
         Me.RichTextBox2.Location = New System.Drawing.Point(326, 77)
@@ -153,12 +155,27 @@ Partial Class Diary
         Me.Button9.Text = "Exit"
         Me.Button9.UseVisualStyleBackColor = True
         '
-        'Form1
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.ForeColor = System.Drawing.Color.Yellow
+        Me.Label1.Location = New System.Drawing.Point(326, 42)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(27, 13)
+        Me.Label1.TabIndex = 13
+        Me.Label1.Text = "Title"
+        '
+        'Diary
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BackColor = System.Drawing.Color.Black
         Me.ClientSize = New System.Drawing.Size(657, 376)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Button9)
         Me.Controls.Add(Me.Button8)
         Me.Controls.Add(Me.Button7)
@@ -174,8 +191,8 @@ Partial Class Diary
         Me.Controls.Add(Me.Button1)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "Form1"
-        Me.Text = "Diary"
+        Me.Name = "Diary"
+        Me.Text = "Diary Enterprise"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -194,4 +211,6 @@ Partial Class Diary
     Friend WithEvents Button7 As Button
     Friend WithEvents Button8 As Button
     Friend WithEvents Button9 As Button
+    Friend WithEvents OpenFileDialog1 As OpenFileDialog
+    Friend WithEvents Label1 As Label
 End Class

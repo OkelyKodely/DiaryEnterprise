@@ -47,7 +47,7 @@ Public Class Diary
         Dim cmd As SqlCommand
         Dim con = New SqlConnection("server = localhost; database = test; integrated security = true")
         Call con.Open()
-        cmd = New SqlCommand("update diary set content = '" & RichTextBox1.Text.Replace("'", "''") & "' where name = '" & ComboBox1.SelectedItem.ToString.Replace("'", "''") & "'", con)
+        cmd = New SqlCommand("update diary set content = '" & RichTextBox1.Text.Replace("'", "''") & "' where name like '" & ComboBox1.SelectedItem.ToString.Replace("'", "''") & "'", con)
         Call cmd.ExecuteNonQuery()
         con.Close()
         MessageBox.Show("Updated")
@@ -80,34 +80,42 @@ Public Class Diary
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        Dim a As String = ""
+        Dim firstline As String = ""
         Try
-            Dim OpenFileDialog1 As New OpenFileDialog
             OpenFileDialog1.Title = "Open File..."
-            OpenFileDialog1.Multiselect = False
-            OpenFileDialog1.Filter = "All Files|*.*"
             OpenFileDialog1.ShowDialog()
-            Dim a = File.ReadAllText(OpenFileDialog1.FileName)
-            Dim xml As XDocument = XDocument.Parse(a)
-            Dim listRows As List(Of XElement) = xml.Descendants("title").ToList()
-            For Each node As XElement In listRows
-                Dim values As List(Of XElement) = node.Descendants("content").ToList()
-                Dim ip As String = values(0)
-                Dim bytes As String = values(1)
-                Dim cmd As SqlCommand
-                Dim con = New SqlConnection("server = localhost; database = test; integrated security = true")
-                Call con.Open()
-                Try
-                    cmd = New SqlCommand("insert into diary (name, content) values ('" & ip.Replace("'", "''") & "', '" & bytes.Replace("'", "''") & "')", con)
-                    Call cmd.ExecuteNonQuery()
-                Catch Ex As Exception
-                End Try
-                con.Close()
-                PrepareDatas()
-            Next
-            ComboBox1.SelectedIndex = 0
-            ComboBox1_SelectedIndexChanged(Nothing, Nothing)
+            Using SR As New System.IO.StreamReader(OpenFileDialog1.OpenFile())
+                Do
+                    Try
+                        firstline = SR.ReadLine
+                        a = a & firstline
+                    Catch Ex As Exception
+                    End Try
+                Loop Until firstline Is Nothing
+            End Using
         Catch Ex As Exception
         End Try
+        Dim xml As XDocument = XDocument.Parse(a)
+        Dim listRows As List(Of XElement) = xml.Descendants("title").ToList()
+        For Each node As XElement In listRows
+            Dim values As List(Of XElement) = node.Descendants("content").ToList()
+            Dim ip As String = values(0)
+            Dim bytes As String = values(1)
+            Dim cmd As SqlCommand
+            Dim con = New SqlConnection("server = localhost; database = test; integrated security = true")
+            Call con.Open()
+            Try
+                cmd = New SqlCommand("insert into diary (name, content) values ('" & ip.Replace("'", "''") & "', '" & bytes.Replace("'", "''") & "')", con)
+                Call cmd.ExecuteNonQuery()
+            Catch Ex As Exception
+                MessageBox.Show(Ex.Message)
+            End Try
+            con.Close()
+            PrepareDatas()
+        Next
+        ComboBox1.SelectedIndex = 0
+        ComboBox1_SelectedIndexChanged(Nothing, Nothing)
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
@@ -125,7 +133,6 @@ Public Class Diary
             Dim myTitle As XmlElement = myDoc.CreateElement("title")
             Dim myContent1 As XmlElement = myDoc.CreateElement("content")
             Dim myContent2 As XmlElement = myDoc.CreateElement("content")
-            myTitle.InnerText = ComboBox1.Items(i).ToString
             Dim cmd As SqlCommand
             Dim con = New SqlConnection("server = localhost; database = test; integrated security = true")
             Call con.Open()
@@ -141,7 +148,7 @@ Public Class Diary
             myTitle.AppendChild(myContent1)
             myTitle.AppendChild(myContent2)
         Next
-        myDoc.Save("D:\\xml.txt")
+        myDoc.Save("D:\\backup.xml")
         MsgBox("Xml File GeneratedUpdated")
     End Sub
 
